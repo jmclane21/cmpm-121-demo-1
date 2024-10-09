@@ -26,38 +26,38 @@ let moyais: number = 0;
 
 moyaiClick.onclick = () => {
   moyais++;
-  counter.innerHTML = `${moyais.toFixed(2)} Moyais`;
+  counter.innerHTML = `${moyais.toFixed(1)} Moyais`;
 };
 
 upgrade.onclick = () => {
   if (moyais >= 10) {
     moyais -= 10;
-    growthRate += 0.0001;
+    growthRate += 0.1;
   }
 };
 
 let growthRate: number = 0.0;
 
-let lastFrame = performance.now();
 requestAnimationFrame(tick);
 
-function tick(){
+function tick() {
   increaseMoyais();
   checkUpgrade();
   requestAnimationFrame(tick);
 }
 
 function checkUpgrade() {
-  if(moyais >= 10) {
+  if (moyais >= 10) {
     upgrade.disabled = false;
   } else {
     upgrade.disabled = true;
   }
 }
 
+let lastFrame = performance.now();
 function increaseMoyais() {
-  const deltaTime = performance.now() - lastFrame;
+  const deltaTime = (performance.now() - lastFrame) / 1000;
   lastFrame = performance.now();
   moyais += deltaTime * growthRate;
-  counter.innerHTML = `${moyais.toFixed(2)} Moyais`;
+  counter.innerHTML = `${moyais.toFixed(1)} Moyais`;
 }

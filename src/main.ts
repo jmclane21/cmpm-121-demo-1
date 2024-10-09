@@ -21,12 +21,17 @@ let moyais: number = 0;
 
 button.onclick = () => {
   moyais++;
-  counter.innerHTML = `${moyais} Moyais`;
+  counter.innerHTML = `${moyais.toFixed(2)} Moyais`;
 };
 
-setInterval(increaseMoyais, 1000);
+const growthRate = .0001;
 
+let lastFrame = performance.now();
+requestAnimationFrame(increaseMoyais);
 function increaseMoyais() {
-  moyais++;
-  counter.innerHTML = `${moyais} Moyais`;
+  const deltaTime = performance.now() - lastFrame;
+  lastFrame = performance.now();
+  moyais += deltaTime * growthRate;
+  counter.innerHTML = `${moyais.toFixed(2)} Moyais`;
+  requestAnimationFrame(increaseMoyais);
 }

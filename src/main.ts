@@ -23,3 +23,10 @@ button.onclick = () => {
   moyais++;
   counter.innerHTML = `${moyais} Moyais`;
 };
+
+setInterval(increaseMoyais, 1000);
+
+function increaseMoyais() {
+  moyais++;
+  counter.innerHTML = `${moyais} Moyais`;
+}

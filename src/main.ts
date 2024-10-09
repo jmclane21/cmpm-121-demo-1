@@ -11,4 +11,15 @@ app.append(header);
 
 const button = document.createElement("button");
 button.innerHTML = "🗿";
-app.append(button)
+app.append(button);
+
+const counter = document.createElement("div");
+counter.innerHTML = `0 Moyais`;
+app.append(counter);
+
+let moyais: number = 0;
+
+button.onclick = () => {
+  moyais++;
+  counter.innerHTML = `${moyais} Moyais`;
+};

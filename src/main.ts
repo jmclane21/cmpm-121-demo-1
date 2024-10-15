@@ -28,22 +28,45 @@ const growthRateDisplay = document.createElement("div");
 growthRateDisplay.innerHTML = `${growthRate} Moyais per second`;
 app.append(growthRateDisplay);
 
+interface Upgrade {
+  name: string;
+  cost: number;
+  growthRate: number;
+}
+
 //buttons for upgrades
+const quarry: Upgrade = {
+  name: "Stone Quarry",
+  cost: 10,
+  growthRate: 0.1,
+};
 
-const quarry = document.createElement("button");
-quarry.innerHTML = `Stone Quarry (10 🗿)`;
-quarry.disabled = true;
-app.append(quarry);
+const sculptor: Upgrade = {
+  name: "Sculptor",
+  cost: 100,
+  growthRate: 2,
+};
 
-const sculptor = document.createElement("button");
-sculptor.innerHTML = `Sculptor (100 🗿)`;
-sculptor.disabled = true;
-app.append(sculptor);
+const upgrade3: Upgrade = {
+  name: "Upgrade 3",
+  cost: 1000,
+  growthRate: 50,
+}
 
-const upgrade3 = document.createElement("button");
-upgrade3.innerHTML = `Upgrade 3 (1000 🗿)`;
-upgrade3.disabled = true;
-app.append(upgrade3);
+const quarryButton = document.createElement("button");
+quarryButton.innerHTML = `Stone Quarry (${quarry.cost.toFixed(2)} 🗿)`;
+quarryButton.disabled = true;
+app.append(quarryButton);
+
+const sculptorButton = document.createElement("button");
+sculptorButton.innerHTML = `Sculptor (${sculptor.cost.toFixed(2)} 🗿)`;
+sculptorButton.disabled = true;
+app.append(sculptorButton);
+
+const upgrade3Button = document.createElement("button");
+upgrade3Button.innerHTML = `Upgrade 3 (${upgrade3.cost.toFixed(2)} 🗿)`;
+upgrade3Button.disabled = true;
+app.append(upgrade3Button);
 
 const upgradeDisplay = document.createElement("div");
 upgradeDisplay.innerHTML = `Stone Quarries: ${upgradeDictionary.quarry}, 
@@ -57,32 +80,35 @@ moyaiClick.onclick = () => {
   counter.innerHTML = `${moyais.toFixed(1)} Moyais`;
 };
 
-quarry.onclick = () => {
-  if (moyais >= 10) {
-    moyais -= 10;
+quarryButton.onclick = () => {
+  if (moyais >= quarry.cost) {
+    moyais -= quarry.cost;
+    quarry.cost *= 1.15;
     growthRate += 0.1;
     upgradeDictionary.quarry++;
-    updateUI()
+    updateUI();
   }
 };
 
-sculptor.onclick = () => {
-  if (moyais >= 100) {
-    moyais -= 100;
+sculptorButton.onclick = () => {
+  if (moyais >= sculptor.cost) {
+    moyais -= sculptor.cost;
+    sculptor.cost *= 1.15;
     growthRate += 2;
     upgradeDictionary.sculptor++;
-    updateUI()
+    updateUI();
   }
 };
 
-upgrade3.onclick = () => {
-  if (moyais >= 1000) {
-    moyais -= 1000;
+upgrade3Button.onclick = () => {
+  if (moyais >= upgrade3.cost) {
+    moyais -= upgrade3.cost;
+    upgrade3.cost *= 1.15;
     growthRate += 50;
     upgradeDictionary.upgrade3++;
-    updateUI()
+    updateUI();
   }
-}
+};
 
 requestAnimationFrame(tick);
 
@@ -93,20 +119,20 @@ function tick() {
 }
 
 function checkUpgrade() {
-  if (moyais >= 1000) {
-    upgrade3.disabled = false;
+  if (moyais >= upgrade3.cost) {
+    upgrade3Button.disabled = false;
   } else {
-    upgrade3.disabled = true;
+    upgrade3Button.disabled = true;
   }
-  if (moyais >= 100) {
-    sculptor.disabled = false;
+  if (moyais >= sculptor.cost) {
+    sculptorButton.disabled = false;
   } else {
-    sculptor.disabled = true;
+    sculptorButton.disabled = true;
   }
-  if (moyais >= 10) {
-    quarry.disabled = false;
+  if (moyais >= quarry.cost) {
+    quarryButton.disabled = false;
   } else {
-    quarry.disabled = true;
+    quarryButton.disabled = true;
   }
 }
 
@@ -119,6 +145,9 @@ function increaseMoyais() {
 }
 
 function updateUI() {
+  quarryButton.innerHTML = `Stone Quarry (${quarry.cost.toFixed(2)} 🗿)`;
+  sculptorButton.innerHTML = `Sculptor (${sculptor.cost.toFixed(2)} 🗿)`;
+  upgrade3Button.innerHTML = `Upgrade 3 (${upgrade3.cost.toFixed(2)} 🗿)`;
   growthRateDisplay.innerHTML = `${growthRate.toFixed(1)} Moyais per second`;
   upgradeDisplay.innerHTML = `Stone Quarries: ${upgradeDictionary.quarry}, 
 Sculptors: ${upgradeDictionary.sculptor}, Upgrade 3: ${upgradeDictionary.upgrade3}`;

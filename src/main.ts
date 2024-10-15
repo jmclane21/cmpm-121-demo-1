@@ -2,7 +2,14 @@ import "./style.css";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
-const gameName = "My soon to be amazing game";
+let growthRate: number = 0.0;
+const upgradeDictionary = {
+  quarry: 0,
+  sculptor: 0,
+  upgrade3: 0,
+};
+
+const gameName = "Easter Island Generator";
 document.title = gameName;
 
 const header = document.createElement("h1");
@@ -17,26 +24,65 @@ const counter = document.createElement("div");
 counter.innerHTML = `0 Moyais`;
 app.append(counter);
 
-const upgrade = document.createElement("button");
-upgrade.innerHTML = `Upgrade`;
-upgrade.disabled = true;
-app.append(upgrade);
+const growthRateDisplay = document.createElement("div");
+growthRateDisplay.innerHTML = `${growthRate} Moyais per second`;
+app.append(growthRateDisplay);
 
-let moyais: number = 0;
+//buttons for upgrades
+
+const quarry = document.createElement("button");
+quarry.innerHTML = `Stone Quarry (10 🗿)`;
+quarry.disabled = true;
+app.append(quarry);
+
+const sculptor = document.createElement("button");
+sculptor.innerHTML = `Sculptor (100 🗿)`;
+sculptor.disabled = true;
+app.append(sculptor);
+
+const upgrade3 = document.createElement("button");
+upgrade3.innerHTML = `Upgrade 3 (1000 🗿)`;
+upgrade3.disabled = true;
+app.append(upgrade3);
+
+const upgradeDisplay = document.createElement("div");
+upgradeDisplay.innerHTML = `Stone Quarries: ${upgradeDictionary.quarry}, 
+Sculptors: ${upgradeDictionary.sculptor}, Upgrade 3: ${upgradeDictionary.upgrade3}`;
+app.append(upgradeDisplay);
+
+let moyais: number = 1000;
 
 moyaiClick.onclick = () => {
   moyais++;
   counter.innerHTML = `${moyais.toFixed(1)} Moyais`;
 };
 
-upgrade.onclick = () => {
+quarry.onclick = () => {
   if (moyais >= 10) {
     moyais -= 10;
     growthRate += 0.1;
+    upgradeDictionary.quarry++;
+    updateUI()
   }
 };
 
-let growthRate: number = 0.0;
+sculptor.onclick = () => {
+  if (moyais >= 100) {
+    moyais -= 100;
+    growthRate += 2;
+    upgradeDictionary.sculptor++;
+    updateUI()
+  }
+};
+
+upgrade3.onclick = () => {
+  if (moyais >= 1000) {
+    moyais -= 1000;
+    growthRate += 50;
+    upgradeDictionary.upgrade3++;
+    updateUI()
+  }
+}
 
 requestAnimationFrame(tick);
 
@@ -47,10 +93,20 @@ function tick() {
 }
 
 function checkUpgrade() {
-  if (moyais >= 10) {
-    upgrade.disabled = false;
+  if (moyais >= 1000) {
+    upgrade3.disabled = false;
   } else {
-    upgrade.disabled = true;
+    upgrade3.disabled = true;
+  }
+  if (moyais >= 100) {
+    sculptor.disabled = false;
+  } else {
+    sculptor.disabled = true;
+  }
+  if (moyais >= 10) {
+    quarry.disabled = false;
+  } else {
+    quarry.disabled = true;
   }
 }
 
@@ -60,4 +116,10 @@ function increaseMoyais() {
   lastFrame = performance.now();
   moyais += deltaTime * growthRate;
   counter.innerHTML = `${moyais.toFixed(1)} Moyais`;
+}
+
+function updateUI() {
+  growthRateDisplay.innerHTML = `${growthRate.toFixed(1)} Moyais per second`;
+  upgradeDisplay.innerHTML = `Stone Quarries: ${upgradeDictionary.quarry}, 
+Sculptors: ${upgradeDictionary.sculptor}, Upgrade 3: ${upgradeDictionary.upgrade3}`;
 }

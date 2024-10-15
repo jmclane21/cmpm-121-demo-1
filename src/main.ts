@@ -47,7 +47,7 @@ const sculptor: Upgrade = {
   growthRate: 2,
 };
 
-const upgrade3: Upgrade = {
+const automason: Upgrade = {
   name: "Upgrade 3",
   cost: 1000,
   growthRate: 50,
@@ -63,14 +63,14 @@ sculptorButton.innerHTML = `Sculptor (${sculptor.cost.toFixed(2)} 🗿)`;
 sculptorButton.disabled = true;
 app.append(sculptorButton);
 
-const upgrade3Button = document.createElement("button");
-upgrade3Button.innerHTML = `Upgrade 3 (${upgrade3.cost.toFixed(2)} 🗿)`;
-upgrade3Button.disabled = true;
-app.append(upgrade3Button);
+const automasonButton = document.createElement("button");
+automasonButton.innerHTML = `Automason (${automason.cost.toFixed(2)} 🗿)`;
+automasonButton.disabled = true;
+app.append(automasonButton);
 
 const upgradeDisplay = document.createElement("div");
 upgradeDisplay.innerHTML = `Stone Quarries: ${upgradeDictionary.quarry}, 
-Sculptors: ${upgradeDictionary.sculptor}, Upgrade 3: ${upgradeDictionary.upgrade3}`;
+Sculptors: ${upgradeDictionary.sculptor}, Automasons: ${upgradeDictionary.upgrade3}`;
 app.append(upgradeDisplay);
 
 let moyais: number = 1000;
@@ -100,10 +100,10 @@ sculptorButton.onclick = () => {
   }
 };
 
-upgrade3Button.onclick = () => {
-  if (moyais >= upgrade3.cost) {
-    moyais -= upgrade3.cost;
-    upgrade3.cost *= 1.15;
+automasonButton.onclick = () => {
+  if (moyais >= automason.cost) {
+    moyais -= automason.cost;
+    automason.cost *= 1.15;
     growthRate += 50;
     upgradeDictionary.upgrade3++;
     updateUI();
@@ -119,10 +119,10 @@ function tick() {
 }
 
 function checkUpgrade() {
-  if (moyais >= upgrade3.cost) {
-    upgrade3Button.disabled = false;
+  if (moyais >= automason.cost) {
+    automasonButton.disabled = false;
   } else {
-    upgrade3Button.disabled = true;
+    automasonButton.disabled = true;
   }
   if (moyais >= sculptor.cost) {
     sculptorButton.disabled = false;
@@ -147,8 +147,8 @@ function increaseMoyais() {
 function updateUI() {
   quarryButton.innerHTML = `Stone Quarry (${quarry.cost.toFixed(2)} 🗿)`;
   sculptorButton.innerHTML = `Sculptor (${sculptor.cost.toFixed(2)} 🗿)`;
-  upgrade3Button.innerHTML = `Upgrade 3 (${upgrade3.cost.toFixed(2)} 🗿)`;
+  automasonButton.innerHTML = `Automason (${automason.cost.toFixed(2)} 🗿)`;
   growthRateDisplay.innerHTML = `${growthRate.toFixed(1)} Moyais per second`;
   upgradeDisplay.innerHTML = `Stone Quarries: ${upgradeDictionary.quarry}, 
-Sculptors: ${upgradeDictionary.sculptor}, Upgrade 3: ${upgradeDictionary.upgrade3}`;
+Sculptors: ${upgradeDictionary.sculptor}, Automasons: ${upgradeDictionary.upgrade3}`;
 }

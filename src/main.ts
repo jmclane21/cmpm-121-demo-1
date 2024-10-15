@@ -29,13 +29,16 @@ interface Item {
   cost: number;
   growthRate: number;
   numOwned: number;
+  description: string;
   button?: HTMLButtonElement;
 }
 
 const availableItems: Item[] = [
-  { name: "Stone Quarry", cost: 10, growthRate: 0.1, numOwned: 0 },
-  { name: "Sculptor", cost: 100, growthRate: 2, numOwned: 0 },
-  { name: "Automason", cost: 1000, growthRate: 50, numOwned: 0 },
+  { name: "Stone Quarry", cost: 10, growthRate: 0.1, numOwned: 0, description: "Mines stone, produces 0.1 Moyai/sec" },
+  { name: "Sculptor", cost: 100, growthRate: 2, numOwned: 0, description: "Professional Moyai sculptor, produces 2 Moyai/sec" },
+  { name: "Automason", cost: 1000, growthRate: 50, numOwned: 0, description: "Automated quarry and sculptor, produces 50 Moyai/sec" },
+  { name: "Moyai Cloner", cost: 10000, growthRate: 1000, numOwned: 0, description: "A large Moyai cloner, produces 1000 Moyai/sec" },
+  { name: "Moyai Paradox", cost: 100000, growthRate: 10000, numOwned: 0, description: "Send Moyai back in time to create the original Moai, produces 10000 Moyai/sec" },
 ];
 
 //buttons for upgrades
@@ -50,7 +53,8 @@ for (const item of availableItems) {
       growthRate += item.growthRate;
       item.numOwned++;
     }
-  }
+  };
+  button.title = item.description;
   item.button = button;
   app.append(button);
 }
@@ -62,7 +66,7 @@ app.append(upgradeDisplay);
 function updateUpgradeDisplay() {
   let result = ``;
   for (const item of availableItems) {
-    result += `${item.name}: ${item.numOwned}, `;
+    result += `${item.name}: ${item.numOwned} `;
   }
   upgradeDisplay.innerHTML = result;
 }
@@ -82,7 +86,7 @@ function tick() {
 }
 
 function checkUpgrade() {
-  for(const item of availableItems) {
+  for (const item of availableItems) {
     if (moyais >= item.cost) {
       item.button!.disabled = false;
     } else {

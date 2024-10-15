@@ -51,7 +51,7 @@ const upgrade3: Upgrade = {
   name: "Upgrade 3",
   cost: 1000,
   growthRate: 50,
-}
+};
 
 const quarryButton = document.createElement("button");
 quarryButton.innerHTML = `Stone Quarry (${quarry.cost.toFixed(2)} 🗿)`;

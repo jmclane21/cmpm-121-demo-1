@@ -3,11 +3,7 @@ import "./style.css";
 const app: HTMLDivElement = document.querySelector("#app")!;
 
 let growthRate: number = 0.0;
-const upgradeDictionary = {
-  quarry: 0,
-  sculptor: 0,
-  upgrade3: 0,
-};
+let moyais: number = 0;
 
 const gameName = "Easter Island Generator";
 document.title = gameName;
@@ -28,86 +24,52 @@ const growthRateDisplay = document.createElement("div");
 growthRateDisplay.innerHTML = `${growthRate} Moyais per second`;
 app.append(growthRateDisplay);
 
-interface Upgrade {
+interface Item {
   name: string;
   cost: number;
   growthRate: number;
+  numOwned: number;
+  button?: HTMLButtonElement;
 }
 
+const availableItems: Item[] = [
+  { name: "Stone Quarry", cost: 10, growthRate: 0.1, numOwned: 0 },
+  { name: "Sculptor", cost: 100, growthRate: 2, numOwned: 0 },
+  { name: "Automason", cost: 1000, growthRate: 50, numOwned: 0 },
+];
+
 //buttons for upgrades
-const quarry: Upgrade = {
-  name: "Stone Quarry",
-  cost: 10,
-  growthRate: 0.1,
-};
-
-const sculptor: Upgrade = {
-  name: "Sculptor",
-  cost: 100,
-  growthRate: 2,
-};
-
-const automason: Upgrade = {
-  name: "Upgrade 3",
-  cost: 1000,
-  growthRate: 50,
-};
-
-const quarryButton = document.createElement("button");
-quarryButton.innerHTML = `Stone Quarry (${quarry.cost.toFixed(2)} 🗿)`;
-quarryButton.disabled = true;
-app.append(quarryButton);
-
-const sculptorButton = document.createElement("button");
-sculptorButton.innerHTML = `Sculptor (${sculptor.cost.toFixed(2)} 🗿)`;
-sculptorButton.disabled = true;
-app.append(sculptorButton);
-
-const automasonButton = document.createElement("button");
-automasonButton.innerHTML = `Automason (${automason.cost.toFixed(2)} 🗿)`;
-automasonButton.disabled = true;
-app.append(automasonButton);
+for (const item of availableItems) {
+  const button = document.createElement("button");
+  button.innerHTML = `${item.name} (${item.cost.toFixed(1)} 🗿)`;
+  button.disabled = true;
+  button.onclick = () => {
+    if (moyais >= item.cost) {
+      moyais -= item.cost;
+      item.cost *= 1.15;
+      growthRate += item.growthRate;
+      item.numOwned++;
+    }
+  }
+  item.button = button;
+  app.append(button);
+}
 
 const upgradeDisplay = document.createElement("div");
-upgradeDisplay.innerHTML = `Stone Quarries: ${upgradeDictionary.quarry}, 
-Sculptors: ${upgradeDictionary.sculptor}, Automasons: ${upgradeDictionary.upgrade3}`;
+updateUpgradeDisplay();
 app.append(upgradeDisplay);
 
-let moyais: number = 1000;
+function updateUpgradeDisplay() {
+  let result = ``;
+  for (const item of availableItems) {
+    result += `${item.name}: ${item.numOwned}, `;
+  }
+  upgradeDisplay.innerHTML = result;
+}
 
 moyaiClick.onclick = () => {
   moyais++;
   counter.innerHTML = `${moyais.toFixed(1)} Moyais`;
-};
-
-quarryButton.onclick = () => {
-  if (moyais >= quarry.cost) {
-    moyais -= quarry.cost;
-    quarry.cost *= 1.15;
-    growthRate += 0.1;
-    upgradeDictionary.quarry++;
-    updateUI();
-  }
-};
-
-sculptorButton.onclick = () => {
-  if (moyais >= sculptor.cost) {
-    moyais -= sculptor.cost;
-    sculptor.cost *= 1.15;
-    growthRate += 2;
-    upgradeDictionary.sculptor++;
-    updateUI();
-  }
-};
-
-automasonButton.onclick = () => {
-  if (moyais >= automason.cost) {
-    moyais -= automason.cost;
-    automason.cost *= 1.15;
-    growthRate += 50;
-    upgradeDictionary.upgrade3++;
-    updateUI();
-  }
 };
 
 requestAnimationFrame(tick);
@@ -115,24 +77,17 @@ requestAnimationFrame(tick);
 function tick() {
   increaseMoyais();
   checkUpgrade();
+  updateUI();
   requestAnimationFrame(tick);
 }
 
 function checkUpgrade() {
-  if (moyais >= automason.cost) {
-    automasonButton.disabled = false;
-  } else {
-    automasonButton.disabled = true;
-  }
-  if (moyais >= sculptor.cost) {
-    sculptorButton.disabled = false;
-  } else {
-    sculptorButton.disabled = true;
-  }
-  if (moyais >= quarry.cost) {
-    quarryButton.disabled = false;
-  } else {
-    quarryButton.disabled = true;
+  for(const item of availableItems) {
+    if (moyais >= item.cost) {
+      item.button!.disabled = false;
+    } else {
+      item.button!.disabled = true;
+    }
   }
 }
 
@@ -141,14 +96,13 @@ function increaseMoyais() {
   const deltaTime = (performance.now() - lastFrame) / 1000;
   lastFrame = performance.now();
   moyais += deltaTime * growthRate;
-  counter.innerHTML = `${moyais.toFixed(1)} Moyais`;
 }
 
 function updateUI() {
-  quarryButton.innerHTML = `Stone Quarry (${quarry.cost.toFixed(2)} 🗿)`;
-  sculptorButton.innerHTML = `Sculptor (${sculptor.cost.toFixed(2)} 🗿)`;
-  automasonButton.innerHTML = `Automason (${automason.cost.toFixed(2)} 🗿)`;
+  counter.innerHTML = `${moyais.toFixed(1)} Moyais`;
+  for (const item of availableItems) {
+    item.button!.innerHTML = `${item.name} (${item.cost.toFixed(1)} 🗿)`;
+  }
   growthRateDisplay.innerHTML = `${growthRate.toFixed(1)} Moyais per second`;
-  upgradeDisplay.innerHTML = `Stone Quarries: ${upgradeDictionary.quarry}, 
-Sculptors: ${upgradeDictionary.sculptor}, Automasons: ${upgradeDictionary.upgrade3}`;
+  updateUpgradeDisplay();
 }

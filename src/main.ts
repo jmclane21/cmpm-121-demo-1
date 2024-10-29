@@ -34,12 +34,45 @@ interface Item {
 }
 
 const availableItems: Item[] = [
-  { name: "Stone Quarry", cost: 10, growthRate: 0.1, numOwned: 0, description: "Mines stone, produces 0.1 Moyai/sec" },
-  { name: "Sculptor", cost: 100, growthRate: 2, numOwned: 0, description: "Professional Moyai sculptor, produces 2 Moyai/sec" },
-  { name: "Automason", cost: 1000, growthRate: 50, numOwned: 0, description: "Automated quarry and sculptor, produces 50 Moyai/sec" },
-  { name: "Moyai Cloner", cost: 10000, growthRate: 1000, numOwned: 0, description: "A large Moyai cloner, produces 1000 Moyai/sec" },
-  { name: "Moyai Paradox", cost: 100000, growthRate: 10000, numOwned: 0, description: "Send Moyai back in time to create the original Moai, produces 10000 Moyai/sec" },
+  {
+    name: "Stone Quarry",
+    cost: 10,
+    growthRate: 0.1,
+    numOwned: 0,
+    description: "Mines stone, produces 0.1 Moyai/sec",
+  },
+  {
+    name: "Sculptor",
+    cost: 100,
+    growthRate: 2,
+    numOwned: 0,
+    description: "Professional Moyai sculptor, produces 2 Moyai/sec",
+  },
+  {
+    name: "Automason",
+    cost: 1000,
+    growthRate: 50,
+    numOwned: 0,
+    description: "Automated quarry and sculptor, produces 50 Moyai/sec",
+  },
+  {
+    name: "Moyai Cloner",
+    cost: 10000,
+    growthRate: 1000,
+    numOwned: 0,
+    description: "A large Moyai cloner, produces 1000 Moyai/sec",
+  },
+  {
+    name: "Moyai Paradox",
+    cost: 100000,
+    growthRate: 10000,
+    numOwned: 0,
+    description:
+      "Send Moyai back in time to create the original Moai, produces 10000 Moyai/sec",
+  },
 ];
+
+const costGrowthRate: number = 1.15;
 
 //buttons for upgrades
 for (const item of availableItems) {
@@ -49,7 +82,7 @@ for (const item of availableItems) {
   button.onclick = () => {
     if (moyais >= item.cost) {
       moyais -= item.cost;
-      item.cost *= 1.15;
+      item.cost *= costGrowthRate;
       growthRate += item.growthRate;
       item.numOwned++;
     }
@@ -87,10 +120,12 @@ function tick() {
 
 function checkUpgrade() {
   for (const item of availableItems) {
-    if (moyais >= item.cost) {
-      item.button!.disabled = false;
-    } else {
-      item.button!.disabled = true;
+    if(item.button){
+      if (moyais >= item.cost) {
+        item.button.disabled = false;
+      } else {
+        item.button.disabled = true;
+      }
     }
   }
 }
@@ -105,7 +140,9 @@ function increaseMoyais() {
 function updateUI() {
   counter.innerHTML = `${moyais.toFixed(1)} Moyais`;
   for (const item of availableItems) {
-    item.button!.innerHTML = `${item.name} (${item.cost.toFixed(1)} 🗿)`;
+    if(item.button){
+      item.button.innerHTML = `${item.name} (${item.cost.toFixed(1)} 🗿)`;
+    }
   }
   growthRateDisplay.innerHTML = `${growthRate.toFixed(1)} Moyais per second`;
   updateUpgradeDisplay();

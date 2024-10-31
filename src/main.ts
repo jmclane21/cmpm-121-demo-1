@@ -12,7 +12,7 @@ const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
-const moyaiClick = document.createElement("button");
+const moyaiClick = document.createElement("h2");
 moyaiClick.innerHTML = "🗿";
 app.append(moyaiClick);
 
@@ -104,10 +104,15 @@ function updateUpgradeDisplay() {
   upgradeDisplay.innerHTML = result;
 }
 
-moyaiClick.onclick = () => {
+//inspired by https://github.com/rozy-dixon/cmpm-121-demo-1/blob/main/src/style.css
+moyaiClick.addEventListener('click', (event) => {
+  event.stopPropagation();
   moyais++;
   counter.innerHTML = `${moyais.toFixed(1)} Moyais`;
-};
+  moyaiClick.classList.remove('wiggle');
+  void moyaiClick.offsetWidth;
+  moyaiClick.classList.add('wiggle');
+});
 
 requestAnimationFrame(tick);
 
@@ -120,7 +125,7 @@ function tick() {
 
 function checkUpgrade() {
   for (const item of availableItems) {
-    if(item.button){
+    if (item.button) {
       if (moyais >= item.cost) {
         item.button.disabled = false;
       } else {
@@ -140,7 +145,7 @@ function increaseMoyais() {
 function updateUI() {
   counter.innerHTML = `${moyais.toFixed(1)} Moyais`;
   for (const item of availableItems) {
-    if(item.button){
+    if (item.button) {
       item.button.innerHTML = `${item.name} (${item.cost.toFixed(1)} 🗿)`;
     }
   }

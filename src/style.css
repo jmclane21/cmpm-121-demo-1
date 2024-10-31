@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #3b2d32;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -34,6 +34,24 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+/* wiggle anim from https://stackoverflow.com/questions/38132700/css-wiggle-shake-effect */
+@keyframes wiggle {
+    0% { transform: rotate(0deg); }
+   25% { transform: rotate(5deg); }
+   50% { transform: rotate(0deg); }
+   75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+h2 {
+  font-size: 6em;
+  margin: 0.3em;
+}
+
+h2.wiggle {
+  animation: wiggle 0.5s;
 }
 
 #app {
@@ -65,7 +83,7 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #9e7a88;
   }
   a:hover {
     color: #747bff;
